@@ -47,11 +47,12 @@ class Portfolio():
     # calculate the total market value for current holdings
     def market_value(self):
         tickers = self.holdings.keys()
-        data = yf.download(tickers, period='1d')['Close'].iloc[-1]
         total = 0
 
         for ticker in tickers:
-            total += self.holdings[ticker][0] * data[ticker]
+            stock = yf.Ticker(ticker)
+            price = stock.history(period='1d')['Close'].iloc[-1]
+            total += self.holdings[ticker][0] * price
 
         return total
     
@@ -59,7 +60,16 @@ class Portfolio():
     def profit_and_loss(self):
         return self.market_value() - self.current_cost()
     
+    # calculate the current market value for a specific stock
+    def current_value_stock(self, stock):
+        if stock not in self.holdings.keys():
+            return
+        
+        ticker = yf.Ticker(stock)
+        price = ticker.history(period="1d")['Close'].iloc[-1]
 
+        return price * self.holdings[stock][0]
+    
     '''
     To-Do:
 
@@ -72,6 +82,18 @@ class Portfolio():
     3. complete stock class so I can have valuation tab on streamline
 
     '''
+
+def test():
+    port = Portfolio()
+    port.buy('VOO', 30, 500)
+    port.buy('VXUS', 20, 50)
+    port.buy('SCHD', 150, 20)
+
+    print(port.current_value_stock('VOO'))
+    print(port.current_value_stock('VXUS'))
+    print(port.current_value_stock('SCHD'))
+
+    print(port.current_value_stock('VOO') / port.market_value())
 
 
 
