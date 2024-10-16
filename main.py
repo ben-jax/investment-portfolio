@@ -75,10 +75,6 @@ class Portfolio():
 
     1. add any function to help manage portfolio
 
-    2. import solara or streamline to start visualizing portfolio
-        charts for cost vs market value
-        pie chart for total holdings (split between stocks sectors ect.)
-
     3. complete stock class so I can have valuation tab on streamline
 
     '''

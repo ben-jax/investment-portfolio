@@ -1,2 +1,2 @@
-# investment-portfolio-py
-An investment portfolio made with python and google sheets api
+# investment-portfolio
+An investment portfolio made with python and visualized with streamlit

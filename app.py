@@ -25,3 +25,5 @@ ax1.axis('equal')
 
 st.pyplot(fig1)
 
+st.write('this is a pie chart')
+
