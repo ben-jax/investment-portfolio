@@ -1,4 +1,5 @@
 import yfinance as yf
+import pandas as pd
 
 class Stock():
     def __init__(self, ticker):
@@ -60,15 +61,43 @@ class Portfolio():
     def profit_and_loss(self):
         return self.market_value() - self.current_cost()
     
-    # calculate the current market value for a specific stock
-    def current_value_stock(self, stock):
-        if stock not in self.holdings.keys():
-            return
-        
-        ticker = yf.Ticker(stock)
-        price = ticker.history(period="1d")['Close'].iloc[-1]
+    # calculate the current market value for a each stock
+    # no input, uses self.holdings
+    # returns a list that has the market value for each stock in portfolio
+    def current_value_stocks(self):
+        ans_list = []
 
-        return price * self.holdings[stock][0]
+        for stock in self.holdings.keys():
+            ticker = yf.Ticker(stock)
+            price = ticker.history(period="1d")['Close'].iloc[-1]
+            ans_list.append(round(price * self.holdings[stock][0], 2))
+
+        return ans_list 
+    
+    # create a pandas dataframe of holdings
+    # no input, uses self.holdings and other functions
+    # return a pandas data frame with ticker, shares owned, cost basis (per share)
+    # market value, and profit and loss
+    def get_pandas_df(self):
+
+        # creating data frame with data from self.holdings, data that we do not have to calculate
+        df = pd.DataFrame.from_dict(self.holdings, orient='index',
+                                    columns=['shares', 'cost basis (per share)'])
+        
+        # creating market value column
+        df['market value'] = self.current_value_stocks()
+        
+        # creating cost basis (total) column
+        df['cost basis (total)'] = df['shares'] * df['cost basis (per share)']
+        
+        # creating profit and loss column
+        df ['profit/loss'] = df['market value'] - df['cost basis (total)']
+
+        # making ticker a column
+        df.reset_index(inplace=True)
+        df.rename(columns={'index': 'Ticker'}, inplace=True)
+
+        return df
     
     '''
     To-Do:
@@ -85,11 +114,8 @@ def test():
     port.buy('VXUS', 20, 50)
     port.buy('SCHD', 150, 20)
 
-    print(port.current_value_stock('VOO'))
-    print(port.current_value_stock('VXUS'))
-    print(port.current_value_stock('SCHD'))
+    print(port.get_pandas_df())
 
-    print(port.current_value_stock('VOO') / port.market_value())
 
 
 
