@@ -99,14 +99,14 @@ class Portfolio():
 
         return df
     
-    '''
+'''
     To-Do:
 
     1. add any function to help manage portfolio
 
     3. complete stock class so I can have valuation tab on streamline
 
-    '''
+    
 
 def test():
     port = Portfolio()
@@ -115,6 +115,7 @@ def test():
     port.buy('SCHD', 150, 20)
 
     print(port.get_pandas_df())
+'''
 
 
 
