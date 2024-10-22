@@ -95,7 +95,7 @@ class Portfolio():
 
         # making ticker a column
         df.reset_index(inplace=True)
-        df.rename(columns={'index': 'Ticker'}, inplace=True)
+        df.rename(columns={'index': 'ticker'}, inplace=True)
 
         return df
     

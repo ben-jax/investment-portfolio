@@ -1,8 +1,8 @@
-import streamlit as st
 import main
+import streamlit as st
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+import seaborn as sb
 
 st.set_page_config(layout='wide')
 
@@ -15,10 +15,8 @@ port.buy('VOO', 30, 500)
 port.buy('VXUS', 20, 50)
 port.buy('SCHD', 150, 20)
 
-# creating columns for webpage, col1 and 2 are for first row, where col1 is 70% of availble space and col2 is 30%
-# col 3 and 4 are for second row
+# creating columns for webpage, col1 and 2 are for first row, where col1 is 60% of availble space and col2 is 40%
 col1, col2 = st.columns([0.6, 0.4])
-col3, col4 = st.columns([0.6, 0.4])
 
 # pandas df of positions, make index one so row starts at 1 not 0
 df = port.get_pandas_df()
@@ -28,8 +26,10 @@ with col1:
     st.header('Current Holdings')
     st.dataframe(df)
 
-
 # creating pie chart for col 2
+sb.set(style='darkgrid')
+colors = sb.color_palette('pastel')
+
 labels = port.holdings.keys()
 prices = port.current_value_stocks()
 sizes = []
@@ -37,33 +37,33 @@ sizes = []
 for i in range(len(prices)):
     sizes.append(prices[i] / port.market_value())
 
-fig1, ax1 = plt.subplots()
-ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+fig1, ax1 = plt.subplots(facecolor='#2D2D2D')
+ax1.pie(sizes, autopct='%1.1f%%', startangle=90, colors=colors, wedgeprops={'edgecolor' : 'black'})
 ax1.axis('equal')
+ax1.legend(labels=labels)
 
 with col2:
     st.pyplot(fig1)
 
+# creating bar chart for cost vs value
+fig2, ax2 = plt.subplots()
 
-with col3:
-    st.header('Allocation by Sector')
+fig2.patch.set_facecolor('#2D2D2D')
+ax2.set_facecolor('#2D2D2D')
 
-with col4:
-    pass
+width = 0.25
+index = range(len(df))
 
-'''
-Home page has a total of 2 rows and 4 columns, 2 columns per row
-only dipslaying info on current holdings, cost value ect and pie chart representing position percentage of total portfolio
+bar_one = ax2.bar(index, df['market value'], width, label='Market Value')
+bar_two = ax2.bar([i + width for i in index], df['cost basis (total)'], width, label='Cost')
 
-then displaying the distribution between sector, stocks, bonds, etfs, cash and other investments
+ax2.set_xlabel('Stock', color='white')
+ax2.set_ylabel('Value ($)', color='white')
+ax2.set_title('Market Value vs Cost For Each Holding', color='white')
 
-Other pages will include, managing positions (adding or removing shares)
-    profit will be tracked in this page
+ax2.set_xticks([i + width / 2 for i in index])
+ax2.set_xticklabels(df['ticker'], color='white')
 
-stock valuation page
+ax2.legend()
 
-dividend info page
-
-'''
-
-
+st.pyplot(fig2)
