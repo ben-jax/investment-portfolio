@@ -8,7 +8,8 @@ import streamlit as st
 port = main.Portfolio()
 
 # Centered layout of page, not as much wide stuff to put on here
-st.set_page_config(layout='centered')
+st.set_page_config(layout='centered',
+                   page_title='Manage Holdings | benjax')
 
 # two containers, one for top (title toggle button), one for body (inputs and buttons)
 top = st.container()
@@ -46,9 +47,9 @@ with body:
     # change holdings toggle
     if not change:
         st.write('Enter your ticker:')
-        ticker = st.text_input('Ticker')
-        shares = st.number_input('Shares Purhcased')
-        price = st.number_input('Price')
+        ticker = st.text_input('Ticker', placeholder='Example: VOO')
+        shares = st.number_input('Shares Purhcased', placeholder=0)
+        price = st.number_input('Price', placeholder=0)
         action = st.selectbox('What Would You Like To Do?', ('Buy', 'Sell'))
 
         # update button

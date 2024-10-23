@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sb
 
-st.set_page_config(layout='wide')
+st.set_page_config(layout='wide', 
+                   page_title='Investment Portfolio | benjax')
 
 st.title('Stock Portfolio')
 
@@ -14,6 +15,8 @@ port = main.Portfolio()
 port.buy('VOO', 30, 500)
 port.buy('VXUS', 20, 50)
 port.buy('SCHD', 150, 20)
+
+# sidebar info and styling
 
 # creating columns for webpage, col1 and 2 are for first row, where col1 is 60% of availble space and col2 is 40%
 col1, col2 = st.columns([0.6, 0.4])
