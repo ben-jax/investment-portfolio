@@ -20,4 +20,5 @@ with top:
 
     with col2:
         st.subheader('Enter a stock ticker to be valued: ')
-        ticker = st.text_input('', placeholder='Example: VOO')
+        ticker = st.text_input('Ticker', placeholder='Example: VOO')
+        enter = st.button('Enter', use_container_width=True)
