@@ -108,7 +108,7 @@ with body:
             # text to be printed after we add something, but haven't updated yet
             # this is required to be rendered after we check if the update has been pressed
             for position in st.session_state.positions:
-                st.write(f'* {position[0]}: {position[1][0]} @ {position[1][1]} dollars a share')
+                st.write(f'* {position[0]}: {position[1][0]} @ ${position[1][1]} a share')
 
         
             
