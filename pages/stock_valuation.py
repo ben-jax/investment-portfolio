@@ -41,6 +41,8 @@ with simple:
 
     with col3:
         st.subheader('Price to Earnings Ratio (P/E):')
+        st.caption('''Ratio of companies stock price to earnings, hence higher ratio indicates a higher price
+                   compared to earnings, and possibly overvalueation of the stock.''')
         
         if run == True:
             st.write(f'Current P/E Ratio (trailing): {round(tpe, 2)}')
@@ -52,6 +54,8 @@ with simple:
 
     with col4:
         st.subheader('Debt to Equity Ratio:')
+        st.caption('''Ratio of a companies debt compared to stock holders equity, higher ratio means a company is relying
+                   heavily on debt for financing, instead of investor funds or equity.''')
 
         if run:
             st.write(f'Current Debt to Equity Ratio: {round(de, 2)}')
@@ -62,6 +66,8 @@ with simple:
 
     with col5:
         st.subheader('Price to Sales Ratio')
+        st.caption('''Ratio of stock price to company sales, a higher ratio indicates higher price
+                    compared to sales, meaning possible overvaluation.''')
 
         if run:
             st.write(f'Price to Sales Ratio: {round(ps, 2)}')
@@ -70,6 +76,9 @@ with simple:
 
     with col6:
         st.subheader('Enterprise Value to EBITDA')
+        st.caption('''Ratio of enterprise value (market cap + total cash and equivalents + total debt) to EBITDA (
+                   earnings before interest, taxes, depreciation and amoritization), higher ratio means a company
+                   may be overvalued.''')
 
         if run:
             st.write(f'Enterprise Value to EBITDA: {round(ev, 2)}')
