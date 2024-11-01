@@ -5,7 +5,8 @@ st.set_page_config(layout='wide',
                    page_title='Stock Valuations | benjax')
 
 top = st.container()
-body = st.container()
+simple = st.container()
+advanced = st.container()
 run = False
 
 with top:
@@ -25,20 +26,56 @@ with top:
         enter = st.button('Enter', use_container_width=True)
         if enter:
             stock = yf.Ticker(f'{ticker.strip().upper()}')
-            pe = stock.info.get('trialingPE')
+            tpe = stock.info.get('trailingPE')
+            fpe = stock.info.get('forwardPE')
+            de = stock.info.get('debtToEquity')
+            ps = stock.info.get('priceToSalesTrailing12Months')
+            ev = stock.info.get('enterpriseToEbitda')
             run = True
 
-with body:
-    col3, col4 = st.columns(2)
+with simple:
     st.header('Simple Valuation Formulas:')
+
+    col3, col4 = st.columns(2)
+    
 
     with col3:
         st.subheader('Price to Earnings Ratio (P/E):')
         
         if run == True:
-            st.write(f'Current P/E Ratio: {pe}')
+            st.write(f'Current P/E Ratio (trailing): {round(tpe, 2)}')
+            st.write(f'Current P/E Ratio (forward): {round(fpe, 2)}')
+
         else:
-            st.write('Current P/E Ratio: ')
+            st.write('Current P/E Ratio (trailing): ')
+            st.write('Current P/E Ratio (forward): ')
 
     with col4:
-        st.subheader('')
+        st.subheader('Debt to Equity Ratio:')
+
+        if run:
+            st.write(f'Current Debt to Equity Ratio: {round(de, 2)}')
+        else:
+            st.write('Current Debt to Equity Ratio: ')
+
+    col5, col6 = st.columns(2)
+
+    with col5:
+        st.subheader('Price to Sales Ratio')
+
+        if run:
+            st.write(f'Price to Sales Ratio: {round(ps, 2)}')
+        else:
+            st.write('Price to Sales Ratio: ')
+
+    with col6:
+        st.subheader('Enterprise Value to EBITDA')
+
+        if run:
+            st.write(f'Enterprise Value to EBITDA: {round(ev, 2)}')
+        else:
+            st.write(f'Enterprise Value to EBITDA: ')
+
+with advanced:
+    st.header('Advanced Valuation Formulas: ')
+    
