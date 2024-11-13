@@ -5,7 +5,7 @@ import streamlit as st
 # need to figure out how to get the same portfolio linked between all sites
 # inputs must only work from data inputed on site (for now)
 
-port = main.Portfolio()
+portfolio = st.session_state.port
 
 # Centered layout of page, not as much wide stuff to put on here
 st.set_page_config(layout='centered',
@@ -57,9 +57,9 @@ with body:
 
         if update:
             if action == 'Buy':
-                port.buy(ticker, shares, price)
+                portfolio.buy(ticker, shares, price)
             if action == 'Sell':
-                port.sell(ticker, shares)
+                portfolio.sell(ticker, shares)
 
     # set holdings toggle            
     else:
@@ -100,7 +100,7 @@ with body:
                 temp_dict = {}
                 for postion in st.session_state.positions:
                     temp_dict[postion[0]] = [postion[1][0], postion[1][1]]
-                port.set_holdings(temp_dict)
+                portfolio.set_holdings(temp_dict)
 
                 # be sure to clear the positions afterwards
                 st.session_state.positions.clear()

@@ -9,12 +9,15 @@ st.set_page_config(layout='wide',
 
 st.title('Stock Portfolio')
 
+if 'port' not in st.session_state:
+    st.session_state.port = main.Portfolio()
 
-port = main.Portfolio()
+portfolio = st.session_state.port
 
-port.buy('VOO', 30, 500)
-port.buy('VXUS', 20, 50)
-port.buy('SCHD', 150, 20)
+if (len(portfolio.holdings.keys()) == 0):
+    portfolio.buy('VOO', 30, 500)
+    portfolio.buy('VXUS', 20, 50)
+    portfolio.buy('SCHD', 150, 20)
 
 # sidebar info and styling
 
@@ -22,7 +25,7 @@ port.buy('SCHD', 150, 20)
 col1, col2 = st.columns([0.6, 0.4])
 
 # pandas df of positions, make index one so row starts at 1 not 0
-df = port.get_pandas_df()
+df = portfolio.get_pandas_df()
 df.index = pd.RangeIndex(start=1, stop=len(df) + 1, step=1)
 
 with col1:
@@ -33,12 +36,12 @@ with col1:
 sb.set(style='darkgrid')
 colors = sb.color_palette('pastel')
 
-labels = port.holdings.keys()
-prices = port.current_value_stocks()
+labels = portfolio.holdings.keys()
+prices = portfolio.current_value_stocks()
 sizes = []
 
 for i in range(len(prices)):
-    sizes.append(prices[i] / port.market_value())
+    sizes.append(prices[i] / portfolio.market_value())
 
 fig1, ax1 = plt.subplots(facecolor='#2D2D2D')
 ax1.pie(sizes, autopct='%1.1f%%', startangle=90, colors=colors, wedgeprops={'edgecolor' : 'black'})
@@ -70,3 +73,4 @@ ax2.set_xticklabels(df['ticker'], color='white')
 ax2.legend()
 
 st.pyplot(fig2)
+
