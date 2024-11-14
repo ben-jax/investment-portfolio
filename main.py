@@ -1,5 +1,6 @@
 import yfinance as yf
 import pandas as pd
+from datetime import datetime, timedelta
 
 class Stock():
     def __init__(self, ticker):
@@ -98,6 +99,34 @@ class Portfolio():
         df.rename(columns={'index': 'ticker'}, inplace=True)
 
         return df
+    
+    # function for returning data to be plotted in line chart on dashboard page
+    # will get price history for each position over time
+    # returns a list of values and dictionary of individual stock and historic prices
+    def line_chart_data(self):
+        stock_prices = {}
+        
+
+        end = datetime.today().strftime('%Y-%m-%d')  # Current date in 'YYYY-MM-DD' format
+        start = (datetime.today() - timedelta(days=365)).strftime('%Y-%m-%d')
+
+        for stock in self.holdings.keys():
+            ticker = yf.Ticker(stock)
+            df = pd.DataFrame(ticker.history(start=start, end=end))
+            stock_prices[stock] = df['Close']
+
+        total_values = []
+        for date in stock_prices[next(iter(stock_prices))].index:
+            value = 0
+            for stock, prices in stock_prices.items():
+                closing = prices[date]
+                value += closing * self.holdings[stock][0]
+            total_values.append(value)
+        return (total_values, stock_prices)
+
+        
+        
+
     
 '''
     To-Do:
