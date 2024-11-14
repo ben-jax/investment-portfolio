@@ -34,8 +34,16 @@ st.sidebar.markdown("""
 
 # creating columns for webpage, col1 and 2 are for first row, where col1 is 60% of availble space and col2 is 40%
 top = st.container()
+
+for _ in range(5):
+    st.write('')
+
 linechart = st.container()
-# buttons will be added here to appear beofre bar chart and after line chart (buttons for picking time on port)
+buttons = st.container()
+
+for _ in range(5):
+    st.write('')
+
 bar = st.container()
 
 
@@ -68,12 +76,37 @@ with top:
 
     with col2:
         st.pyplot(fig1)
+# buttons show up after line chart because container was initialized after linechart container
+# putting it before linechart so that the linechart container knows what is selected for time frame
+with buttons:
+
+    # days variable for line chart
+    days = 365
+
+    # added more columns for space
+    col3, col4, col5, col6, col7, col8, col9 = st.columns(7)
+
+    with col3:
+        if st.button("1W", use_container_width=True):
+            days = 7
+
+    with col5:
+        if st.button('1M', use_container_width=True):
+            days = 30
+
+    with col7:
+        if st.button('1Y', use_container_width=True):
+            days = 365
+
+    with col9:
+        if st.button('3Y', use_container_width=True):
+            days = 1095
 
 with linechart:
     sb.set(style='darkgrid')  # Ensure the Seaborn style is set for the line chart
 
     # Get the plotting data from the portfolio
-    plotting_info = portfolio.line_chart_data()
+    plotting_info = portfolio.line_chart_data(days)
 
     # Create a Seaborn lineplot (instead of using plt.plot)
     fig3, ax3 = plt.subplots(figsize=(10, 6))

@@ -105,12 +105,12 @@ class Portfolio():
     # function for returning data to be plotted in line chart on dashboard page
     # will get price history for each position over time
     # returns a list of values and dictionary of individual stock and historic prices
-    def line_chart_data(self):
+    def line_chart_data(self, days):
         stock_prices = {}
         
 
         end = datetime.today().strftime('%Y-%m-%d')  # Current date in 'YYYY-MM-DD' format
-        start = (datetime.today() - timedelta(days=365)).strftime('%Y-%m-%d')
+        start = (datetime.today() - timedelta(days=days)).strftime('%Y-%m-%d')
 
         for stock in self.holdings.keys():
             ticker = yf.Ticker(stock)
