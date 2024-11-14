@@ -4,6 +4,19 @@ import yfinance as yf
 st.set_page_config(layout='centered',
                    page_title='Dividend Dashboard | benjax')
 
+# sidebar info and styling
+st.sidebar.title("Investment Dashbaord")
+st.sidebar.write("Navigate tools for managing your investments and portfolio.")
+
+for _ in range(11):
+    st.sidebar.write("")
+
+st.sidebar.subheader("Made by Ben Jacobs")
+st.sidebar.markdown("""
+            [![GitHub](https://img.icons8.com/ios/50/000000/github.png)](https://github.com/ben-jax)
+            [![LinkedIn](https://img.icons8.com/ios/50/000000/linkedin.png)](https://www.linkedin.com/in/ben-jax/)
+        """)
+
 top = st.container()
 contents = st.container()
 

@@ -41,6 +41,8 @@ class Portfolio():
                 return
             self.holdings[stock] = [self.holdings[stock][0] - shares,
                                     self.holdings[stock][1]]
+            if self.holdings[stock][0] == 0:
+                del self.holdings[stock]
             
     # calculate the total cost for current holdings        
     def current_cost(self):

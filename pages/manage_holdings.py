@@ -11,6 +11,19 @@ portfolio = st.session_state.port
 st.set_page_config(layout='centered',
                    page_title='Manage Holdings | benjax')
 
+# sidebar info and styling
+st.sidebar.title("Investment Dashbaord")
+st.sidebar.write("Navigate tools for managing your investments and portfolio.")
+
+for _ in range(11):
+    st.sidebar.write("")
+
+st.sidebar.subheader("Made by Ben Jacobs")
+st.sidebar.markdown("""
+            [![GitHub](https://img.icons8.com/ios/50/000000/github.png)](https://github.com/ben-jax)
+            [![LinkedIn](https://img.icons8.com/ios/50/000000/linkedin.png)](https://www.linkedin.com/in/ben-jax/)
+        """)
+
 # two containers, one for top (title toggle button), one for body (inputs and buttons)
 top = st.container()
 body = st.container()
@@ -48,7 +61,7 @@ with body:
     if not change:
         st.write('Enter your ticker:')
         ticker = st.text_input('Ticker', placeholder='Example: VOO')
-        shares = st.number_input('Shares Purhcased', placeholder=0)
+        shares = st.number_input('Shares', placeholder=0)
         price = st.number_input('Price', placeholder=0)
         action = st.selectbox('What Would You Like To Do?', ('Buy', 'Sell'))
 

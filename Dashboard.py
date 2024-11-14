@@ -20,11 +20,24 @@ if (len(portfolio.holdings.keys()) == 0):
     portfolio.buy('SCHD', 150, 20)
 
 # sidebar info and styling
+st.sidebar.title("Investment Dashbaord")
+st.sidebar.write("Navigate tools for managing your investments and portfolio.")
+
+for _ in range(11):
+    st.sidebar.write("")
+
+st.sidebar.subheader("Made by Ben Jacobs")
+st.sidebar.markdown("""
+            [![GitHub](https://img.icons8.com/ios/50/000000/github.png)](https://github.com/ben-jax)
+            [![LinkedIn](https://img.icons8.com/ios/50/000000/linkedin.png)](https://www.linkedin.com/in/ben-jax/)
+        """)
 
 # creating columns for webpage, col1 and 2 are for first row, where col1 is 60% of availble space and col2 is 40%
 top = st.container()
-bar = st.container()
 linechart = st.container()
+# buttons will be added here to appear beofre bar chart and after line chart (buttons for picking time on port)
+bar = st.container()
+
 
 with top:
     col1, col2 = st.columns([0.6, 0.4])
@@ -56,6 +69,42 @@ with top:
     with col2:
         st.pyplot(fig1)
 
+with linechart:
+    sb.set(style='darkgrid')  # Ensure the Seaborn style is set for the line chart
+
+    # Get the plotting data from the portfolio
+    plotting_info = portfolio.line_chart_data()
+
+    # Create a Seaborn lineplot (instead of using plt.plot)
+    fig3, ax3 = plt.subplots(figsize=(10, 6))
+    sb.lineplot(x=plotting_info[1][next(iter(portfolio.holdings.keys()))].index, 
+                y=plotting_info[0], 
+                color='b', 
+                label='Portfolio Value', 
+                linewidth=2,
+                ax=ax3)
+    
+    fig3.patch.set_facecolor('#2D2D2D')
+    ax3.set_facecolor('#2D2D2D')
+
+    # Title and axis labels
+    ax3.set_title('Portfolio Value Over Time', fontsize=16, color='white')
+    ax3.set_xlabel('Date', fontsize=12, color='white')
+    ax3.set_ylabel('Portfolio Value ($)', fontsize=12, color='white')
+
+    # Rotate x-axis labels for better visibility
+    plt.xticks(rotation=45, color='white')
+    plt.yticks(color='white')
+
+    # Add grid and legend
+    ax3.grid(True)
+    ax3.legend()
+
+    # Adjust layout to avoid clipping of labels
+    plt.tight_layout()
+
+    # Display the plot in Streamlit using st.pyplot()
+    st.pyplot(fig3)
 
 with bar:
     # creating bar chart for cost vs value
@@ -77,42 +126,13 @@ with bar:
     ax2.set_xticks([i + width / 2 for i in index])
     ax2.set_xticklabels(df['ticker'], color='white')
 
+    plt.yticks(color='white')
+
     ax2.legend()
 
     st.pyplot(fig2)
 
-with linechart:
-    sb.set(style='darkgrid')  # Ensure the Seaborn style is set for the line chart
 
-    # Get the plotting data from the portfolio
-    plotting_info = portfolio.line_chart_data()
-
-    # Create a Seaborn lineplot (instead of using plt.plot)
-    plt.figure(figsize=(10, 6))
-    sb.lineplot(x=plotting_info[1][next(iter(portfolio.holdings.keys()))].index, 
-                y=plotting_info[0], 
-                marker='o', 
-                color='b', 
-                label='Portfolio Value', 
-                linewidth=2)
-
-    # Title and axis labels
-    plt.title('Portfolio Value Over Time', fontsize=16)
-    plt.xlabel('Date', fontsize=12)
-    plt.ylabel('Portfolio Value ($)', fontsize=12)
-
-    # Rotate x-axis labels for better visibility
-    plt.xticks(rotation=45)
-
-    # Add grid and legend
-    plt.grid(True)
-    plt.legend()
-
-    # Adjust layout to avoid clipping of labels
-    plt.tight_layout()
-
-    # Display the plot in Streamlit using st.pyplot()
-    st.pyplot(plt)
 
     
     
