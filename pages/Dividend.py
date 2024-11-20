@@ -1,5 +1,6 @@
 import streamlit as st
 import yfinance as yf
+import main
 
 st.set_page_config(layout='centered',
                    page_title='Dividend Dashboard | benjax')
