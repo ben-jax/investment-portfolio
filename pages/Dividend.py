@@ -21,20 +21,25 @@ top = st.container()
 contents = st.container()
 
 with top:
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([0.7, 0.3])
 
     with col2:
         change = st.toggle('Search Ticker')
 
         if change:
             ticker = st.text_input('Ticker', placeholder='Example: VOO')
+            if ticker:
+                stock = yf.Ticker(ticker.strip().upper())
+                dividend = round(stock.info.get('dividendYield'), 4)
+                payout_ratio = stock.info.get('payoutRatio')
+                fcf = stock.info.get('freeCashflow')
         else:
-            st.write('basic portfolio dividend info will go here')
+            st.write('')
 
     with col1:
         st.header('Dividend Dashbaord')
         if change:
-            st.write('Look up dividend information by entering a ticker.')
+            st.write('Enter a ticker to learn more dividend information about a stock:')
         else:
             st.write('Your dividend dashboard, for information on your current dividends')
 
@@ -54,20 +59,70 @@ with contents:
 
         with col5:
             st.write('and finally, more info')
+
+    # else we are looking up dividend information for individual stocks
     else:
-        st.header('Chart')
 
         # three columns to house more information about portfolio dividends
         col3, col4, col5 = st.columns(3)
 
         with col3:
-            st.write('info')
+            st.subheader('Yield:')
+            if ticker:
+                st.html(f"""
+                    <div style="
+                    border: 2px solid #FF4B4B;
+                    border-radius: 10px; 
+                    padding: 20px; 
+                    background-color: #f0f8f5;
+                    text-align: center;
+                    font-size: 36px;
+                    height 100px;
+                    color: #333;">
+                        
+                    {dividend * 100}%
+
+                    </div>
+                """)
 
         with col4: 
-            st.write('more info')
+            st.subheader('Payout Ratio:')
+            if ticker:
+                st.html(f"""
+                        <div style="
+                        border: 2px solid #FF4B4B;
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        background-color: #f0f8f5;
+                        text-align: center;
+                        font-size: 36px;
+                        height: 100px;
+                        color: #333;">
+                            
+                        {payout_ratio}
+
+                        </div>
+                    """)
+
 
         with col5:
-            st.write('and finally, more info')
+            st.subheader('Free Cash Flow:')
+            if ticker:
+                st.html(f"""
+                        <div style="
+                        border: 2px solid #FF4B4B;
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        background-color: #f0f8f5;
+                        text-align: center;
+                        font-size: 28px;
+                        height: 100px;
+                        color: #333;">
+                            
+                        ${fcf:,}
+
+                        </div>
+                    """)
 
 
     
