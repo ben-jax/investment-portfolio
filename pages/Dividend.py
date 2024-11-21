@@ -1,6 +1,8 @@
 import streamlit as st
 import yfinance as yf
+import pandas as pd
 import main
+from datetime import datetime, timedelta
 
 st.set_page_config(layout='centered',
                    page_title='Dividend Dashboard | benjax')
@@ -32,10 +34,37 @@ with top:
             if ticker:
                 stock = yf.Ticker(ticker.strip().upper())
                 dividend = round(stock.info.get('dividendYield'), 4)
-                payout_ratio = stock.info.get('payoutRatio')
+                payout_ratio = round(stock.info.get('payoutRatio'), 2)
+                price = stock.info.get('previousClose')
+                payout = stock.info.get('dividendRate')
                 fcf = stock.info.get('freeCashflow')
-        else:
-            st.write('')
+                shares = stock.info.get('sharesOutstanding')
+
+                # calculating dividend cagr
+                dividends = stock.dividends
+
+                if not dividends.empty:
+                    # Define the end and start dates as pandas.Timestamp to ensure compatibility
+                    end = pd.Timestamp(datetime.today())
+                    start = pd.Timestamp(end - timedelta(days=1825))
+
+                    # Handle timezone if necessary (only if dividends.index has timezone)
+                    if dividends.index.tz is not None:
+                        end = end.tz_localize(dividends.index.tz)
+                        start = start.tz_localize(dividends.index.tz)
+
+                    # Filter and calculate the start and end values
+                    filtered_dividends = dividends[(dividends.index >= start) & (dividends.index <= end)]
+                    
+                    if not filtered_dividends.empty:
+                        start_value = filtered_dividends.iloc[0]
+                        end_value = filtered_dividends.iloc[-1]
+
+                        # Calculate the number of years
+                        n_years = (end - start).days / 365.25
+
+                        # Calculate CAGR
+                        cagr = round(((end_value / start_value) ** (1 / n_years)) - 1, 2)
 
     with col1:
         st.header('Dividend Dashbaord')
@@ -69,6 +98,7 @@ with contents:
 
         with col3:
             st.subheader('Yield:')
+            st.caption('Current starting yeild.')
             if ticker:
                 st.html(f"""
                     <div style="
@@ -88,6 +118,7 @@ with contents:
 
         with col4: 
             st.subheader('Payout Ratio:')
+            st.caption('Payout ratio of earnings to dividends.')
             if ticker:
                 st.html(f"""
                         <div style="
@@ -100,14 +131,15 @@ with contents:
                         height: 100px;
                         color: #333;">
                             
-                        {payout_ratio}
+                        {payout_ratio * 100}%
 
                         </div>
                     """)
 
 
         with col5:
-            st.subheader('Free Cash Flow:')
+            st.subheader('Stock Price:')
+            st.caption('Stocks most recent closing price.')
             if ticker:
                 st.html(f"""
                         <div style="
@@ -116,14 +148,63 @@ with contents:
                         padding: 20px; 
                         background-color: #f0f8f5;
                         text-align: center;
-                        font-size: 28px;
+                        font-size: 36px;
                         height: 100px;
                         color: #333;">
                             
-                        ${fcf:,}
+                        ${price}
 
                         </div>
                     """)
+                
+        col6, col7, col8 = st.columns(3)
+
+        with col6:
+            st.subheader('Payout:')
+            st.caption('Payout per share.')
+            if ticker:
+                st.html(f"""
+                        <div style="
+                        border: 2px solid #FF4B4B;
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        background-color: #f0f8f5;
+                        text-align: center;
+                        font-size: 36px;
+                        height: 100px;
+                        color: #333;">
+                            
+                        ${payout}
+
+                        </div>
+                    """)
+                
+        with col7:
+            st.subheader('Dividend CAGR:')
+            st.caption('5 year dividend CAGR.')
+            if ticker:
+                st.html(f"""
+                        <div style="
+                        border: 2px solid #FF4B4B;
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        background-color: #f0f8f5;
+                        text-align: center;
+                        font-size: 36px;
+                        height: 100px;
+                        color: #333;">
+                            
+                        {cagr * 100}%
+
+                        </div>
+                    """)
+
+
+        with col8:
+            st.subheader('FCF CAGR:')
+            st.caption('5 year FCF CAGR.')
+            
+                
 
 
     
