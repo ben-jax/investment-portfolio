@@ -217,7 +217,7 @@ with contents:
                         height: 100px;
                         color: #333;">
                             
-                        {round(fcf_cagr * 100, 2)}%
+                        {round(abs(fcf_cagr) * 100, 2)}%
 
                         </div>
                     """)
