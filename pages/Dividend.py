@@ -118,6 +118,22 @@ with contents:
 
                     </div>
                 """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
 
         with col4: 
             st.subheader('Payout Ratio:')
@@ -138,6 +154,22 @@ with contents:
 
                         </div>
                     """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
 
 
         with col5:
@@ -159,12 +191,28 @@ with contents:
 
                         </div>
                     """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
                 
         col6, col7, col8 = st.columns(3)
 
         with col6:
             st.subheader('Payout:')
-            st.caption('Payout per share.')
+            st.caption('Payout per share (yearly).')
             if ticker:
                 st.html(f"""
                         <div style="
@@ -181,6 +229,22 @@ with contents:
 
                         </div>
                     """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
                 
         with col7:
             st.subheader('Dividend CAGR:')
@@ -201,26 +265,60 @@ with contents:
 
                         </div>
                     """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
 
 
         with col8:
             st.subheader('FCF CAGR:')
             st.caption('4 year FCF CAGR.')
-            st.html(f"""
-                        <div style="
-                        border: 2px solid #FF4B4B;
-                        border-radius: 10px; 
-                        padding: 20px; 
-                        background-color: #f0f8f5;
-                        text-align: center;
-                        font-size: 36px;
-                        height: 100px;
-                        color: #333;">
-                            
-                        {round(abs(fcf_cagr) * 100, 2)}%
+            if ticker:
+                st.html(f"""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            {round(abs(fcf_cagr) * 100, 2)}%
 
-                        </div>
-                    """)
+                            </div>
+                        """)
+            else:
+                st.html("""
+                            <div style="
+                            border: 2px solid #FF4B4B;
+                            border-radius: 10px; 
+                            padding: 20px; 
+                            background-color: #f0f8f5;
+                            text-align: center;
+                            font-size: 36px;
+                            height: 100px;
+                            color: #333;">
+                                
+                            
+
+                            </div>
+                        """)
+
         
             
                 
