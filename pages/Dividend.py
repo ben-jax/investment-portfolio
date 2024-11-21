@@ -44,7 +44,6 @@ with top:
                 dividends = stock.dividends
 
                 if not dividends.empty:
-                    # Define the end and start dates as pandas.Timestamp to ensure compatibility
                     end = pd.Timestamp(datetime.today())
                     start = pd.Timestamp(end - timedelta(days=1825))
 
@@ -53,23 +52,27 @@ with top:
                         end = end.tz_localize(dividends.index.tz)
                         start = start.tz_localize(dividends.index.tz)
 
-                    # Filter and calculate the start and end values
                     filtered_dividends = dividends[(dividends.index >= start) & (dividends.index <= end)]
                     
                     if not filtered_dividends.empty:
                         start_value = filtered_dividends.iloc[0]
                         end_value = filtered_dividends.iloc[-1]
-
-                        # Calculate the number of years
                         n_years = (end - start).days / 365.25
-
-                        # Calculate CAGR
-                        cagr = round(((end_value / start_value) ** (1 / n_years)) - 1, 2)
+                        div_cagr = ((end_value / start_value) ** (1 / n_years)) - 1
+                
+                historic_fcf = stock.cashflow.loc['Free Cash Flow']
+                historic_fcf.index = pd.to_datetime(historic_fcf.index)
+                if len(historic_fcf) >= 4:
+                    start_value = historic_fcf.iloc[3]
+                    end_value = historic_fcf.iloc[0]  
+                    n_years = len(historic_fcf) - 1
+                    fcf_cagr = ((end_value / start_value) ** (1 / n_years)) - 1
 
     with col1:
         st.header('Dividend Dashbaord')
         if change:
-            st.write('Enter a ticker to learn more dividend information about a stock:')
+            st.write('Enter a ticker to learn more dividend information about a stock.')
+            st.write('This uses companies financials, so it is not intended for ETFs.')
         else:
             st.write('Your dividend dashboard, for information on your current dividends')
 
@@ -194,7 +197,7 @@ with contents:
                         height: 100px;
                         color: #333;">
                             
-                        {cagr * 100}%
+                        {round(div_cagr * 100, 2)}%
 
                         </div>
                     """)
@@ -202,7 +205,23 @@ with contents:
 
         with col8:
             st.subheader('FCF CAGR:')
-            st.caption('5 year FCF CAGR.')
+            st.caption('4 year FCF CAGR.')
+            st.html(f"""
+                        <div style="
+                        border: 2px solid #FF4B4B;
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        background-color: #f0f8f5;
+                        text-align: center;
+                        font-size: 36px;
+                        height: 100px;
+                        color: #333;">
+                            
+                        {round(fcf_cagr * 100, 2)}%
+
+                        </div>
+                    """)
+        
             
                 
 
