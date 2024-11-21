@@ -95,7 +95,6 @@ with contents:
 
     # else we are looking up dividend information for individual stocks
     else:
-
         # three columns to house more information about portfolio dividends
         col3, col4, col5 = st.columns(3)
 
@@ -134,7 +133,6 @@ with contents:
 
                             </div>
                         """)
-
         with col4: 
             st.subheader('Payout Ratio:')
             st.caption('Payout ratio of earnings to dividends.')
@@ -170,8 +168,6 @@ with contents:
 
                             </div>
                         """)
-
-
         with col5:
             st.subheader('Stock Price:')
             st.caption('Stocks most recent closing price.')
@@ -207,7 +203,7 @@ with contents:
 
                             </div>
                         """)
-                
+    
         col6, col7, col8 = st.columns(3)
 
         with col6:
@@ -245,7 +241,6 @@ with contents:
 
                             </div>
                         """)
-                
         with col7:
             st.subheader('Dividend CAGR:')
             st.caption('5 year dividend CAGR.')
@@ -281,8 +276,6 @@ with contents:
 
                             </div>
                         """)
-
-
         with col8:
             st.subheader('FCF CAGR:')
             st.caption('4 year FCF CAGR.')
